@@ -50,8 +50,11 @@ const replaceTemplate = (temp,product) => {
 const server=http.createServer((req,res) => {
     console.log(req.url);
     //console.log(req);
-    const pathName = req.url;
-    if (pathName=== "/overview" ||  pathName === "/")  {
+    //console.log(url.parse(req.url,true));
+    const {query , pathname} = url.parse(req.url,true);
+
+    //Overview Page
+    if (pathname=== "/overview" ||  pathname === "/")  {
         res.writeHead(200,{
             'Content-type': 'text/html'
         });
@@ -64,7 +67,16 @@ const server=http.createServer((req,res) => {
         //read template overview
         res.end(output);
     }
-    else if (pathName === "/api"){
+    else if(pathname === "/product"){
+        const product = dataObj[query.id];
+        //console.log(query);
+        const output = replaceTemplate(tempProduct, product);
+
+        res.end(output);
+
+    }
+
+    else if (pathname === "/api"){
         
             res.writeHead(200,{
                 'Content-type': 'application/json'});
